@@ -1,0 +1,439 @@
+{
+  "folders": [
+    {
+      "name": "JavaScript",
+      "parentId": null,
+      "isOpen": false,
+      "isSystem": false,
+      "defaultLanguage": "plain_text",
+      "id": "8-ZEMkvg",
+      "createdAt": 1667232270511,
+      "updatedAt": 1667232280514,
+      "index": 1
+    },
+    {
+      "name": "TypeScript",
+      "parentId": null,
+      "isOpen": true,
+      "isSystem": false,
+      "defaultLanguage": "plain_text",
+      "id": "wkdVqoTd",
+      "createdAt": 1667232282813,
+      "updatedAt": 1667232291787,
+      "index": 2
+    },
+    {
+      "name": "React",
+      "parentId": null,
+      "isOpen": false,
+      "isSystem": false,
+      "defaultLanguage": "plain_text",
+      "id": "PbPs_ezN",
+      "createdAt": 1667139740749,
+      "updatedAt": 1667139749119,
+      "index": 3
+    },
+    {
+      "name": "Vue",
+      "parentId": null,
+      "isOpen": false,
+      "isSystem": false,
+      "defaultLanguage": "plain_text",
+      "id": "LiT016ox",
+      "createdAt": 1667232263000,
+      "updatedAt": 1667232267399,
+      "index": 4
+    },
+    {
+      "name": "shell",
+      "parentId": null,
+      "isOpen": false,
+      "isSystem": false,
+      "defaultLanguage": "plain_text",
+      "id": "REioU3id",
+      "createdAt": 1667231892899,
+      "updatedAt": 1667231899454,
+      "index": 5
+    },
+    {
+      "name": "Node.js",
+      "parentId": null,
+      "isOpen": false,
+      "isSystem": false,
+      "defaultLanguage": "plain_text",
+      "id": "BVskXbK_",
+      "createdAt": 1667232099918,
+      "updatedAt": 1667232105839,
+      "index": 6
+    },
+    {
+      "name": "Git",
+      "parentId": null,
+      "isOpen": false,
+      "isSystem": false,
+      "defaultLanguage": "plain_text",
+      "id": "AHt0zdai",
+      "createdAt": 1667232331715,
+      "updatedAt": 1667232335922,
+      "index": 7
+    },
+    {
+      "name": "常用模板",
+      "parentId": null,
+      "isOpen": false,
+      "isSystem": false,
+      "defaultLanguage": "plain_text",
+      "id": "ZbHQHZsK",
+      "createdAt": 1667211024031,
+      "updatedAt": 1667211031578,
+      "index": 8
+    },
+    {
+      "name": "HTML",
+      "parentId": null,
+      "isOpen": false,
+      "isSystem": false,
+      "defaultLanguage": "plain_text",
+      "id": "rhlgrR2r",
+      "createdAt": 1667393585746,
+      "updatedAt": 1667393592151
+    }
+  ],
+  "snippets": [
+    {
+      "isDeleted": true,
+      "isFavorites": false,
+      "folderId": "PbPs_ezN",
+      "tagsIds": [],
+      "description": null,
+      "name": "Untitled snippet",
+      "content": [
+        {
+          "label": "Fragment 1",
+          "language": "plain_text",
+          "value": "import React, { useEffect, useState } from 'react';\nimport {\n  getYearFirstDayTs,\n  generateCalendar,\n  getCurrentYear,\n  getCurrentMonth,\n  getMonthFirstDayTs,\n  getMonthLastDayTs\n} from '@/utils/date';\nimport { EApiStatus } from '@/api/request';\nimport '@/styles/pages/manager/schedule.scss';\nimport scheduleApi from '@/api/manager/schedule'\nimport ScheduleDrawer from '@/pages/manager/order/ScheduleDrawer'\nimport OrderSchedule from '@/pages/manager/order/OrderEditSchedule'\nimport { IScheduleListType } from '@/interface/api/manager/schedule'\nimport { Fab } from '@material-ui/core';\nimport AddIcon from '@material-ui/icons/Add';\nimport { useStyles } from '@/pages/manager/order/custommui/custommui'\nimport { IconFont } from '@public/components';\nimport dayjs from 'dayjs'\n\n\ninterface calendarDataType {\n  fiscal_year: number,\n  fiscal_month: Array<{\n    month: number,\n    fiscal_month: number,\n    fiscal_week: Array<{\n      week: number,\n      timestamps: Array<number>\n    }>\n  }>\n}\n\nconst calendarData: calendarDataType = generateCalendar(2022);\n\nconst Calendar = () => {\n\n  // 控制日历一个对象\n  const [calendar, setCalendar] = useState({\n    data: calendarData,\n    currentYear: getCurrentYear(),\n    currentMonth: getCurrentMonth(),\n    currentMonthFirstDayTs: dayjs().startOf('month').unix(),\n  })\n  const [showScheduleDrawer, setShowScheduleDrawer] = useState(false)\n  const [showOrderSchedule, setShowOrderSchedule] = useState(false)\n\n  // 控制状态一个对象\n\n  // 行程日历下发的数据\n  const [scheduleCalendarData, setScheduleCalendarData] = useState<any>(null)\n\n  // Drawer相关的数据\n  const [scheDrawer, setScheDrawer] = useState<any>({\n    scheduleList: [],\n  })\n\n  useEffect(() => { initConfig() }, [])\n\n  // 初始化数据\n  const initConfig = () => {\n    // 获取日历数据\n    const currentYear = getCurrentYear();\n    calendar.currentYear = currentYear;\n\n    // 设置当前月份\n    const currentMonth = getCurrentMonth();\n    calendar.currentMonth = currentMonth;\n\n    const startOfMonth = dayjs().startOf('month').unix();\n    const endOfMonth = dayjs().endOf('month').unix();\n    calendar.currentMonthFirstDayTs = startOfMonth;\n\n    // 获取当前月份的行程数据\n    fetchScheduleList(String(startOfMonth), String(endOfMonth));\n  }\n\n  const fetchScheduleList = async (start_at: string, end_at: string) => {\n    const params = {\n      app_id: '这里需要加id',\n      start_at,\n      end_at,\n    }\n    const response = await scheduleApi.fetchScheduleCalendarApi(params);\n    if (response.status === EApiStatus.success) {\n      const { data } = response\n      const scheduleList = await changeResposeData(data)\n      setScheduleCalendarData(scheduleList)\n    }\n  }\n\n  // 使用 reducer 重构 将date 作为key 生成对象\n  const changeResposeData = async (scheduleList: Array<IScheduleListType>) => {\n\n    const scheduleData = scheduleList.reduce((acc: any, cur) => {\n      const { date } = cur\n      acc[date] = cur\n      return acc\n    }, {})\n\n    return scheduleData\n\n  }\n\n  // custom methods\n  const handleSwitchMonth = (optType: 'pre' | 'next') => {\n    // 1. 切换月份\n    switch (optType) {\n      case 'pre':\n        calendar.currentMonth -= 1;\n        const preMonthTs = dayjs(calendar.currentMonthFirstDayTs).subtract(1, 'month').unix();\n        calendar.currentMonthFirstDayTs = preMonthTs;\n        if (calendar.currentMonth === 0) {\n          calendar.currentMonth = 12;\n          calendar.currentYear -= 1;\n          // 重新生成日历数据\n          calendar.data = generateCalendar(calendar.currentYear);\n        }\n        break;\n      case 'next':\n        calendar.currentMonth += 1;\n        const nextMonthTs = dayjs(calendar.currentMonthFirstDayTs).add(1, 'month').unix();\n        calendar.currentMonthFirstDayTs = nextMonthTs;\n        // 当大于12时 currentMonth 变成1月份\n        if (calendar.currentMonth > 12) {\n          calendar.currentMonth = 1;\n          calendar.currentYear += 1;\n          // 并重新生成日历数据\n          calendar.data = generateCalendar(calendar.currentYear);\n        }\n        break;\n    }\n\n\n\n    // 2. 重新请求数据\n    const startOfMonth = getMonthFirstDayTs(calendar.currentMonthFirstDayTs).toString()\n    const endOfMonth = getMonthLastDayTs(calendar.currentMonthFirstDayTs).toString()\n\n    fetchScheduleList(startOfMonth, endOfMonth)\n\n  }\n\n\n\n  const handleShowScheduleDrawer = (timestampItem: number) => {\n    if (scheduleCalendarData[timestampItem]) {\n      scheDrawer.scheduleList = scheduleCalendarData[timestampItem]\n      setShowScheduleDrawer(true)\n      setScheDrawer({ ...scheDrawer })\n    } else {\n      setShowOrderSchedule(true)\n    }\n  }\n\n  // 假设现在是9月 这里数据从后台下发中确认 先放个假数据\n\n  const calendarShowData = calendar.data.fiscal_month.filter(item => item.fiscal_month === calendar.currentMonth)\n\n  const classes = useStyles();\n\n\n  \n\n\n  return (\n    <div className=\"svt-schedule-root\">\n      <div className=\"svt-schedule-header\">\n        <span>行程</span>\n        <div className=\"header-line\"></div>\n      </div>\n\n      <div className=\"schedule-calendar-switch\">\n\n        <div className=\"month-switch\">\n          <div className=\"month-switch-btn left\" onClick={() => handleSwitchMonth('pre')}></div>\n          <div className=\"month-show\">{calendar.currentYear}年{calendar.currentMonth}月</div>\n          <div className=\"month-switch-btn right\" onClick={() => handleSwitchMonth('next')}></div>\n        </div>\n\n        <div className=\"month-select\">\n          <div className=\"month-select-show\">月</div>\n        </div>\n      </div>\n\n      <div className=\"schedule-calendar\">\n\n        <div className=\"calendar-title\">\n          {\n            ['周日', '周一', '周二', '周三', '周四', '周五', '周六'].map((item: string, index: number) =>\n              <div className=\"calendar-title-item\" key={index}>{item}</div>\n            )\n          }\n        </div>\n\n        <div className=\"calendar-content\">\n          {\n            calendarShowData[0].fiscal_week.map((weekItem: any, index: number) =>\n              <div key={index} className=\"calendar-content-item\">\n                {\n                  weekItem.timestamps.map((timestampItem: number, index: number) =>\n                    <div key={index} className=\"calendar-content-item-day\" onClick={() => { handleShowScheduleDrawer(timestampItem) }}>\n                      <div className=\"day-date\">{new Date(timestampItem * 1000).getDate()}</div>\n                      <div className=\"day-content\">\n                        {\n                          scheduleCalendarData?.timestampItem?.schedule.map((scheduleItem: any) =>\n                            <div key={scheduleItem.id} className=\"day-content-item\">\n                              <div className=\"day-content-item-title\">{scheduleItem.title}</div>\n                            </div>\n                          )\n                        }\n                      </div>\n                    </div>\n                  )\n                }\n              </div>\n            )\n          }\n        </div>\n\n        <ScheduleDrawer\n          open={showScheduleDrawer}\n          scheduleList={scheDrawer.scheduleList}\n          onClose={() => setShowScheduleDrawer(false)}\n        />\n\n        <OrderSchedule\n          closeOrderSchedule={() => setShowOrderSchedule(false)}\n          open={showOrderSchedule}\n        />\n\n        <Fab\n          classes={{ root: classes.fabRoot }}\n          onClick={() => setShowOrderSchedule(true)}\n        >\n          <AddIcon />\n        </Fab>\n\n      </div>\n    </div>\n  )\n}\n\nexport default Calendar;\n"
+        }
+      ],
+      "id": "BRxOvMvr",
+      "createdAt": 1667139751305,
+      "updatedAt": 1667211018376
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "PbPs_ezN",
+      "tagsIds": [
+        "Qmx72XVS",
+        "PKsx4852",
+        "0mVx4a7O"
+      ],
+      "description": null,
+      "name": "ReactHooksTs",
+      "content": [
+        {
+          "label": "Fragment 1",
+          "language": "jsx",
+          "value": "import React, { useEffect, useState } from 'react';\nimport { getMonthLastDayTs } from '@/utils/date';\nimport { EApiStatus } from '@/api/request';\nimport '@/styles/pages/manager/schedule.scss';\nimport scheduleApi from '@/api/manager/schedule'\nimport ScheduleDrawer from '@/pages/manager/order/ScheduleDrawer'\nimport OrderSchedule from '@/pages/manager/order/OrderEditSchedule'\nimport { IScheduleListType } from '@/interface/api/manager/schedule'\nimport { Fab } from '@material-ui/core';\nimport AddIcon from '@material-ui/icons/Add';\nimport { useStyles } from '@/pages/manager/order/custommui/custommui'\nimport { IconFont } from '@public/components';\nimport dayjs from 'dayjs'\n\n\n// define enum 定义枚举\nexport enum EStoreType {\n  '组织架构' = 'dept',\n  '门店类别' = 'store_category',\n  '门店组' = 'deptgroup',\n  '所在城市' = 'region'\n}\n\n// define type 定义类型\ninterface calendarDataType {\n\n}\n\n// define propsType 定义props类型\ninterface calendarPropsType {\n  open: boolean; // 开关\n  openId?: string; // 当前展开列表id\n  onClose: (open: boolean) => void; // 关闭事件\n  onOk: (selectData: any) => void; // 确认事件\n  tag_type?: ETagType; // 标签类型 1任务标签, 2todo标签, 3备忘录标签, (0全部,弹框内暂不做请求支持)\n  type: 'tag' | 'store', // tag ： 标签列表  store：门店,\n}\n\nconst calendarData: calendarDataType = generateCalendar(2022);\n\n\n// comments 注释\n/**\n * @description: 日历组件\n * @param {calendarPropsType} props\n * @return {*}\n * @Date: 2021-09-01 15:00:00\n * @LastEditors: zhanghongqiao\n * @LastEditTime: 2021-09-01 15:00:00\n * @FilePath: /src/pages/manager/order/OrderEditSchedule.tsx\n * \n*/\n\nconst Calendar = ({\n  open,\n  openId,\n  onClose,\n  onOk,\n  tag_type,\n}: calendarPropsType) => {\n\n  // custom state hooks 状态管理\n  // 行程日历下发的数据\n  const [scheduleCalendarData, setScheduleCalendarData] = useState<calendarDataType | null>(null)\n\n\n  // lifecycle\n  // componentDidMount 组件挂载\n  useEffect(() => {\n\n  }, [])\n\n  // componentWillUnmount 组件卸载\n  useEffect(() => {\n    return () => {\n\n    }\n  }, [])\n\n  // api fetch data init data 请求数据 初始化数据\n  const fetchScheduleList = async (start_at: string, end_at: string) => {\n    const params = {\n      app_id: '这里需要加id',\n    }\n    const response = await scheduleApi.fetchScheduleCalendarApi(params);\n    if (response.status === EApiStatus.success) {\n      const { data } = response\n      const scheduleList = await changeResposeData(data)\n      setScheduleCalendarData(scheduleList)\n    }\n  }\n\n  // methods 自定义方法\n\n  // 使用 reducer 重构 将date 作为key 生成对象\n  const changeResposeData = async (scheduleList: Array<IScheduleListType>) => {\n\n    const scheduleData = scheduleList.reduce((acc: any, cur) => {\n      const { date } = cur\n      acc[date] = cur\n      return acc\n    }, {})\n\n    return scheduleData\n\n  }\n\n  // click methods 点击方法\n  const handleSwitchMonth = (optType: 'pre' | 'next') => {\n\n  }\n\n\n  // claculate methods 计算属性\n\n  const calendarShowData = calendar.data.fiscal_month.filter(item => item.fiscal_month === calendar.currentMonth)\n\n\n  // deconstruct assignment 解构赋值\n  const classes = useStyles();\n\n\n\n\n\n  // render ui 渲染ui\n  return (\n    <div className=\"svt-schedule-root\" onClick={() => handleSwitchMonth('next')}>\n      content\n    </div>\n  )\n}\n\nexport default Calendar;\n"
+        }
+      ],
+      "id": "j0jPJEIA",
+      "createdAt": 1667145718327,
+      "updatedAt": 1667145852638
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "ZbHQHZsK",
+      "tagsIds": [
+        "F4jKICV_"
+      ],
+      "description": null,
+      "name": "提测模板",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "plain_text",
+          "value": "#提测申请# #web前端提测# @Git 分支管理 @Git分支管理-Web前端 @朱晓娜(Hannah)\n\n-【web前端】-\n仓库：jwprotal\n集成分支：release/wy/ff23cfd5/release_sbux_20221009\n测试分支：release/wy/f28b7185/ent_sbux_20221009\n\n仓库：joywok-public-dist\n集成分支：release/wy/0ef33329/release_sbux_20221009\n测试分支：release/wy/965f63cd/ent_sbux_20221009\n\n\n-【测试内容】-\n周计划需求调整\n1. 右上角打印预览图标改为文字\n\n2. 打印\n2.1 页面由横向改为纵向\n2.2 打印预览弹框 客户可自由调整缩放倍数以适配A4纸张\n\n3. 新建事件\n3.1 无事件时点击空白新建\n3.2 有事件时移入展示加号点击加号新建 点击卡片为详情\n3.3 新建事件 - 时间取消限制 可以跨周\n3.4 点击新建按钮 - 时间组件默认为左上角日历当前选中周的第一天\n\n4. 新增全天开关\n4.1 本周关注 - 事件 新建事件组件新增全天开关控制是否展示时间部分\n4.2 打开开关 按天选取 不展示时间\n4.3 关闭开关 可以选择具体到时刻\n4.4 开关状态有后台记录\n4.5 新建时默认打开 编辑时读取后台记录的上一次开关状态\n\n5. 日历组件\n5.1 日历组件中的p 改为财月\n\n-【自测结果】-\n1. 右上角打印预览图标改为文字✅\n\n2. 打印\n2.1 页面由横向改为纵向✅\n2.2 打印预览弹框 客户可自由调整缩放倍数以适配A4纸张✅\n\n3. 新建事件\n3.1 无事件时点击空白新建✅\n3.2 有事件时移入展示加号点击加号新建 点击卡片为详情✅\n3.3 新建事件 - 时间取消限制 可以跨周✅\n3.4 点击新建按钮 - 时间组件默认为左上角日历当前选中周的第一天✅\n\n4. 新增全天开关\n4.1 本周关注 - 事件 新建事件组件新增全天开关控制是否展示时间部分✅\n4.2 打开开关 按天选取 不展示时间✅\n4.3 关闭开关 可以选择具体到时刻✅\n4.4 开关状态有后台记录✅\n4.5 新建时默认打开 编辑时读取后台记录的上一次开关状态✅\n\n5. 日历组件\n5.1 日历组件中的p 改为财月✅\n\n5. 日历组件\n5.1 日历组件中的p 改为财月\n\n\n-【影响点】-\n周计划\n\n\n-【测试环境】-\nhttps://dogesoft.joywok.com/url/PSaP4KX\n\n\n-【涉及核心文件】-\nsrc/scripts/pages/weekplan/index.js\nsrc/scripts/pages/weekplan/preview.js\n\n\ncc @王琰 、 @孟影(Luna) 、 @QA  @产品 @后台 @其他人  "
+        }
+      ],
+      "id": "c-5QzuN7",
+      "createdAt": 1667211034503,
+      "updatedAt": 1667211407956
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "ZbHQHZsK",
+      "tagsIds": [
+        "1TM99xCB"
+      ],
+      "description": null,
+      "name": "上线模板",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "plain_text",
+          "value": "#上线升级# #前端分支合并# @Web前端组\n\n上线环境：AWS PORD\n上线时间：2022 10月中旬\n项目名称：@SaaS产品相关\n本地环境：https://dogesoft.joywok.com/url/Cybb5O9\n\n后台分支：release/master/bd0a7ef2/saas_prod_20221015\n前端分支：release/qixq/master/71423334/release_saas_20221015\n\n-【测试内容】-\n1. master全量功能 （含最新回归的 yum sbux apac ）\n\n-【影响点&模块】-\n1. 订阅号；\n2. 全局搜索；\n3. Chorus；\n4. 抽奖；\n5. 文件；\n6. IM;\n7. 信息流转发\n8. 活动日历\n9. builder\n\n-【合并内容】-\n1.抽奖资格的获取条件支持生日、入职周年\n提测：https://dogesoft.joywok.com/as/info?id=4oEmBpq4pBa9yfX0#/\n仓库：disney-draw\n分支：wy_lottery_conditions-0711\n研发：@王琰 ✅\n\n-【源码仓库&分支】-\n1. jwprotal\n集成分支：release/qixq/master/5009be2b/release_saas_20221015\n功能分支：feature/yujl/ff23cfd5/feature_as_20220909\n\n\n-【自动化方案】-\n1. Gitlab-CI/CD"
+        }
+      ],
+      "id": "nQMowTus",
+      "createdAt": 1667211043428,
+      "updatedAt": 1667211402347
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "ZbHQHZsK",
+      "tagsIds": [
+        "hyuM393s",
+        "MqQ2YrlM"
+      ],
+      "description": null,
+      "name": "上线确认",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "plain_text",
+          "value": "分支合并正确， 与上线内容一致。\n仓库：joywok-public-dist\n分支：master\ncommitid：8f0aca2f65b0fe38d00d9833e013a7d3ea27fef3\n\n仓库：filemerge\n分支：master\ncommitid：8f0aca2f65b0fe38d00d9833e013a7d3ea27fef3\n\n\n-【变动仓库&模块】-\nform: 表单；\njwprotal： 订阅号；活动；\njoywok-web：管理后台；"
+        }
+      ],
+      "id": "ZalZXMbb",
+      "createdAt": 1667211389775,
+      "updatedAt": 1667211416616
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "ZbHQHZsK",
+      "tagsIds": [],
+      "description": null,
+      "name": "日报模板",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "plain_text",
+          "value": "@每日站立会 @Web前端团队\n\n2022.10.19 #工作日报#\n\n今日工作计划：\n1. SVT - 行程、会议开发\n2. SVT - 我收到的设计开发\n\n今日工作达成情况：\n1. SVT - 行程会议开发 80%\n2. SVT - 我收到的设计开发 0%\n\n今日处理其他事项：\n1. sla问题处理\n2.上线分支处理\n3.JSSDK 对接\n4.技术文档会议\n5.文档库迁移至新框架 部署\n\n明日工作计划：\n1.迪士尼uat上线分支合并\n2.SVT-行程会议开发\n\ncc @孟影(Luna) @王琰"
+        }
+      ],
+      "id": "8Rj-zmQZ",
+      "createdAt": 1667227997225,
+      "updatedAt": 1667228008242
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "ZbHQHZsK",
+      "tagsIds": [],
+      "description": null,
+      "name": "周报模板",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "plain_text",
+          "value": "@每日站立会 @Web前端组 #工作周报#\n\n2022年10月5周 20221024~20221028\n\n本周工作:\n1. 周计划新需求开发\n2. JSSDK 对接\n3. SVT - 行程会议开发\n4. XSS漏洞定位\n5. 底层组件私有依赖拆除\n6. Yum 上线bug\n\n下周工作:\n1. SVT - 行程会议联调(问题总结)\n2. SVT - 我收到的开发\n3. AWS 生产上线\n\n@孟影(Luna)  "
+        }
+      ],
+      "id": "MNjafwhh",
+      "createdAt": 1667228013290,
+      "updatedAt": 1667228053357
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "REioU3id",
+      "tagsIds": [],
+      "description": null,
+      "name": "ssh查询分支",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "plain_text",
+          "value": "ssh root@192.168.${env} \"cd /var/front/joywok-public-dist/; git branch --show current;git log -l\""
+        }
+      ],
+      "id": "G7S_O2o8",
+      "createdAt": 1667231902029,
+      "updatedAt": 1667231932561
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "REioU3id",
+      "tagsIds": [],
+      "description": null,
+      "name": "ssh免密登陆",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "plain_text",
+          "value": "ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.52"
+        }
+      ],
+      "id": "m_ofSZtY",
+      "createdAt": 1667231956630,
+      "updatedAt": 1667231981523
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "REioU3id",
+      "tagsIds": [],
+      "description": null,
+      "name": "scp拷贝文件",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "sh",
+          "value": "scp ./SvtMeeting.php root@192.168.1.58:/var/www/joywok/library/models/svt"
+        }
+      ],
+      "id": "ZUbbZkEh",
+      "createdAt": 1667232045869,
+      "updatedAt": 1667232528734
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "BVskXbK_",
+      "tagsIds": [],
+      "description": null,
+      "name": "node-schedule定时查询",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "javascript",
+          "value": "const notifier = require('node-notifier');\nconst schedule = require('node-schedule');\nconst {execSync} =  require('child_process')\n\nconst  scheduleCronstyle = ()=>{\n  //每分钟的第30秒定时执行一次:\n    schedule.scheduleJob('30 * * * * *',()=>{\n        console.log('scheduleCronstyle:' + new Date());\n        // notifier.notify('Go empty the dishwasher!');\n    });\n}\n\nscheduleCronstyle();"
+        }
+      ],
+      "id": "46heTNmW",
+      "createdAt": 1667232127466,
+      "updatedAt": 1667232451580
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "rhlgrR2r",
+      "tagsIds": [],
+      "description": null,
+      "name": "svg logding效果",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "html",
+          "value": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Document</title>\n  <style>\n    .circular {\n      height: 22px;\n      width: 22px;\n      animation: loading-rotate 2s linear infinite;\n    }\n\n    .circular .path {\n      animation: loading-dash 1.5s ease-in-out infinite;\n      stroke-dasharray: 90, 150;\n      stroke-dashoffset: 0;\n      stroke-width: 4;\n      stroke: #409eff;\n      stroke-linecap: round\n    }\n\n    @keyframes loading-rotate {\n      to {\n        transform: rotate(1turn)\n      }\n    }\n\n    @keyframes loading-dash {\n      0% {\n        stroke-dasharray: 1, 200;\n        stroke-dashoffset: 0\n      }\n      50% {\n        stroke-dasharray: 90, 150;\n        stroke-dashoffset: -40px\n      }\n      to {\n        stroke-dasharray: 90, 150;\n        stroke-dashoffset: -120px\n      }\n    }\n  </style>\n</head>\n\n<body>\n  <svg viewBox=\"25 25 50 50\" class=\"circular\">\n    <circle cx=\"50\" cy=\"50\" r=\"20\" fill=\"none\" class=\"path\"></circle>\n  </svg>\n</body>\n\n</html>"
+        }
+      ],
+      "id": "UlylaggR",
+      "createdAt": 1667393595553,
+      "updatedAt": 1667393666480
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "rhlgrR2r",
+      "tagsIds": [],
+      "description": null,
+      "name": "超出省略",
+      "content": [
+        {
+          "label": "css",
+          "language": "css",
+          "value": "\n\ndiv{\n  width: 200px;\n  height: 20px;\n  border: 1px solid pink;\n  /* 强制文本在一行显示 */\n  white-space: nowrap; \n  /* 隐藏溢出内容 */\n  overflow: hidden;\n  /* 溢出进行省略 */\n  text-overflow: ellipsis;\n}"
+        },
+        {
+          "label": "html",
+          "language": "html",
+          "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <link rel=\"stylesheet\" href=\"index.css\">\n  <title>Document</title>\n</head>\n<body>\n  <div>至尊宝牛逼！至尊宝牛逼！至尊宝牛逼！至尊宝牛逼！至尊宝牛逼！至尊宝牛逼！至尊宝牛逼！至尊宝牛逼！</div>\n</body>\n</html>"
+        }
+      ],
+      "id": "doyZ6VVP",
+      "createdAt": 1667393788297,
+      "updatedAt": 1667394198344
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "rhlgrR2r",
+      "tagsIds": [],
+      "description": null,
+      "name": "三角形",
+      "content": [
+        {
+          "label": "css",
+          "language": "css",
+          "value": ".div1{\n  width: 0;\n  height: 0;\n  border-top: 250px solid #f6d365;\n  border-left: 250px solid #a4d7e1;\n  border-bottom: 250px solid #ed1250;\n  border-right: 250px solid #414141;\n  margin: 40px auto;\n}\n.div2{\n  width: 0;\n  height: 0;\n  border-top: 250px solid #f6d365;\n  border-left: 250px solid transparent;\n  border-bottom: 250px solid transparent;\n  border-right: 250px solid transparent;\n  margin: 0 auto;\n}\n//  三角形\n.div3{\n  width: 0;\n  height: 0;\n  border: 250px solid transparent;\n  border-top-color: #ed1250;\n  margin: 0 auto;\n}"
+        },
+        {
+          "label": "html",
+          "language": "html",
+          "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <link rel=\"stylesheet\" href=\"index.css\">\n  <title>CSS三角形</title>\n</head>\n<body>\n  <div class=\"div1\"></div>\n  <div class=\"div2\"></div>\n  <div class=\"div3\"></div>\n</body>\n</html>"
+        }
+      ],
+      "id": "bKSxAIJv",
+      "createdAt": 1667394017883,
+      "updatedAt": 1667394152354
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "rhlgrR2r",
+      "tagsIds": [],
+      "description": null,
+      "name": "气泡效果",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "html",
+          "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <style>\n        *{\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n \n        .kuang{\n            position: fixed;\n            top: 0;\n            left: 0;\n            width: 100%;\n            height: 100%;\n            z-index: -10;\n            background-image: linear-gradient(180deg,rgb(78, 168, 241),rgb(37, 91, 241));\n\n        }\n        .bubble{\n            position: absolute;\n            border-radius: 50%;\n            border: 2px solid #fff;\n            box-shadow: inset 0 0 8px  #fff;\n            animation: flutter 10s infinite;\n            opacity: 0;\n        }\n        @keyframes flutter {\n            0%{\n                transform: translateX(0);\n                bottom: -100px;\n                opacity: 1;\n            }\n            50%{\n                transform: translateX(100px);\n                opacity: 0.5;\n            }\n\n            \n            100%{\n                transform: translateX(0px);\n                bottom: 100%;\n                opacity: 0;\n\n            }\n        }\n        .bubble:nth-child(1){\n            left: -10%;\n            width: 50px;\n            height: 50px; \n            animation-duration: 9s;\n            animation-delay: 0.1s;\n        }\n        .bubble:nth-child(2){\n            left: 15%;\n            width: 20px;\n            height: 20px;\n            animation-duration: 6s;\n            animation-delay: 1.5s;\n\n        }\n        .bubble:nth-child(3){\n            left: 20%;\n            width: 60px;\n            height: 60px;\n            animation-duration: 10s;\n            \n\n\n        }\n        .bubble:nth-child(4){\n            left: 30%;\n            width: 30px;\n            height: 30px;\n            animation-duration: 5.5s;\n            animation-delay: 1.5s;\n\n        }\n        .bubble:nth-child(5){\n            left: 40%x;\n            width: 50px;\n            height: 50px;\n            animation-duration: 12s;\n            \n\n\n        }\n        .bubble:nth-child(6){\n            left: 50%;\n            width: 20px;\n            height: 20px;\n            animation-duration: 6s;\n            animation-delay: 1s;\n\n        }\n        .bubble:nth-child(7){\n            left: 60%;\n            width: 40px;\n            height: 40px;\n            animation-duration: 8s;\n            animation-delay: 1s;\n\n        }\n        .bubble:nth-child(8){\n            left: 65%;\n            width: 60px;\n            height: 60px;\n            animation-duration: 15s;\n          \n        }\n        .bubble:nth-child(9){\n            left: 80%;\n            width: 55px;\n            height: 55px;\n            animation-duration: 9s;\n            animation-delay: 0.5s;\n            \n        }\n        .bubble:nth-child(10){\n            left: 100%;\n            width: 40px;\n            height: 40px;\n            animation-duration: 12s;\n\n        }\n    </style>\n</head>\n<body>\n    <div class=\"kuang\">\n        <div class=\"bubble\"></div>\n        <div class=\"bubble\"></div>\n        <div class=\"bubble\"></div>\n        <div class=\"bubble\"></div>\n        <div class=\"bubble\"></div>\n        <div class=\"bubble\"></div>\n        <div class=\"bubble\"></div>\n        <div class=\"bubble\"></div>\n        <div class=\"bubble\"></div>\n        <div class=\"bubble\"></div>\n    </div>\n    \n</body>\n</html>\n "
+        }
+      ],
+      "id": "jE22R84l",
+      "createdAt": 1667445837252,
+      "updatedAt": 1667445850236
+    }
+  ],
+  "tags": [
+    {
+      "name": "React",
+      "id": "Qmx72XVS",
+      "createdAt": 1667145740740,
+      "updatedAt": 1667145740740
+    },
+    {
+      "name": "Hooks",
+      "id": "PKsx4852",
+      "createdAt": 1667145743679,
+      "updatedAt": 1667145743679
+    },
+    {
+      "name": "Ts",
+      "id": "0mVx4a7O",
+      "createdAt": 1667145745678,
+      "updatedAt": 1667145745678
+    },
+    {
+      "name": "上线模板",
+      "id": "1TM99xCB",
+      "createdAt": 1667211402331,
+      "updatedAt": 1667211402331
+    },
+    {
+      "name": "提测模板",
+      "id": "F4jKICV_",
+      "createdAt": 1667211407939,
+      "updatedAt": 1667211407939
+    },
+    {
+      "name": "确认模板",
+      "id": "hyuM393s",
+      "createdAt": 1667211414858,
+      "updatedAt": 1667211414858
+    },
+    {
+      "name": "上线",
+      "id": "MqQ2YrlM",
+      "createdAt": 1667211416593,
+      "updatedAt": 1667211416593
+    }
+  ]
+}
