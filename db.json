@@ -133,12 +133,12 @@
         {
           "label": "Fragment 1",
           "language": "jsx",
-          "value": "import React, { useEffect, useState } from 'react';\nimport { getMonthLastDayTs } from '@/utils/date';\nimport { EApiStatus } from '@/api/request';\nimport '@/styles/pages/manager/schedule.scss';\nimport scheduleApi from '@/api/manager/schedule'\nimport ScheduleDrawer from '@/pages/manager/order/ScheduleDrawer'\nimport OrderSchedule from '@/pages/manager/order/OrderEditSchedule'\nimport { IScheduleListType } from '@/interface/api/manager/schedule'\nimport { Fab } from '@material-ui/core';\nimport AddIcon from '@material-ui/icons/Add';\nimport { useStyles } from '@/pages/manager/order/custommui/custommui'\nimport { IconFont } from '@public/components';\nimport dayjs from 'dayjs'\n\n\n// define enum 定义枚举\nexport enum EStoreType {\n  '组织架构' = 'dept',\n  '门店类别' = 'store_category',\n  '门店组' = 'deptgroup',\n  '所在城市' = 'region'\n}\n\n// define type 定义类型\ninterface calendarDataType {\n\n}\n\n// define propsType 定义props类型\ninterface calendarPropsType {\n  open: boolean; // 开关\n  openId?: string; // 当前展开列表id\n  onClose: (open: boolean) => void; // 关闭事件\n  onOk: (selectData: any) => void; // 确认事件\n  tag_type?: ETagType; // 标签类型 1任务标签, 2todo标签, 3备忘录标签, (0全部,弹框内暂不做请求支持)\n  type: 'tag' | 'store', // tag ： 标签列表  store：门店,\n}\n\nconst calendarData: calendarDataType = generateCalendar(2022);\n\n\n// comments 注释\n/**\n * @description: 日历组件\n * @param {calendarPropsType} props\n * @return {*}\n * @Date: 2021-09-01 15:00:00\n * @LastEditors: zhanghongqiao\n * @LastEditTime: 2021-09-01 15:00:00\n * @FilePath: /src/pages/manager/order/OrderEditSchedule.tsx\n * \n*/\n\nconst Calendar = ({\n  open,\n  openId,\n  onClose,\n  onOk,\n  tag_type,\n}: calendarPropsType) => {\n\n  // custom state hooks 状态管理\n  // 行程日历下发的数据\n  const [scheduleCalendarData, setScheduleCalendarData] = useState<calendarDataType | null>(null)\n\n\n  // lifecycle\n  // componentDidMount 组件挂载\n  useEffect(() => {\n\n  }, [])\n\n  // componentWillUnmount 组件卸载\n  useEffect(() => {\n    return () => {\n\n    }\n  }, [])\n\n  // api fetch data init data 请求数据 初始化数据\n  const fetchScheduleList = async (start_at: string, end_at: string) => {\n    const params = {\n      app_id: '这里需要加id',\n    }\n    const response = await scheduleApi.fetchScheduleCalendarApi(params);\n    if (response.status === EApiStatus.success) {\n      const { data } = response\n      const scheduleList = await changeResposeData(data)\n      setScheduleCalendarData(scheduleList)\n    }\n  }\n\n  // methods 自定义方法\n\n  // 使用 reducer 重构 将date 作为key 生成对象\n  const changeResposeData = async (scheduleList: Array<IScheduleListType>) => {\n\n    const scheduleData = scheduleList.reduce((acc: any, cur) => {\n      const { date } = cur\n      acc[date] = cur\n      return acc\n    }, {})\n\n    return scheduleData\n\n  }\n\n  // click methods 点击方法\n  const handleSwitchMonth = (optType: 'pre' | 'next') => {\n\n  }\n\n\n  // claculate methods 计算属性\n\n  const calendarShowData = calendar.data.fiscal_month.filter(item => item.fiscal_month === calendar.currentMonth)\n\n\n  // deconstruct assignment 解构赋值\n  const classes = useStyles();\n\n\n\n\n\n  // render ui 渲染ui\n  return (\n    <div className=\"svt-schedule-root\" onClick={() => handleSwitchMonth('next')}>\n      content\n    </div>\n  )\n}\n\nexport default Calendar;\n"
+          "value": "import React, { useEffect, useState } from 'react';\nimport { getMonthLastDayTs } from '@/utils/date';\nimport { EApiStatus } from '@/api/request';\nimport '@/styles/pages/manager/schedule.scss';\nimport scheduleApi from '@/api/manager/schedule'\nimport ScheduleDrawer from '@/pages/manager/order/ScheduleDrawer'\nimport OrderSchedule from '@/pages/manager/order/OrderEditSchedule'\nimport { IScheduleListType } from '@/interface/api/manager/schedule'\nimport { Fab } from '@material-ui/core';\nimport AddIcon from '@material-ui/icons/Add';\nimport { useStyles } from '@/pages/manager/order/custommui/custommui'\nimport { IconFont } from '@public/components';\nimport dayjs from 'dayjs'\n\n\n// define enum 定义枚举\nexport enum EStoreType {\n  '组织架构' = 'dept',\n  '门店类别' = 'store_category',\n  '门店组' = 'deptgroup',\n  '所在城市' = 'region'\n}\n\n// define type 定义类型\ninterface calendarDataType {\n\n}\n\n// define propsType 定义props类型\ninterface clockInPropsType {\n}\n\n\n\n\n// comments 注释\n/**\n * @description: 日历组件\n * @param {calendarPropsType} props\n * @return {*}\n * @Date: 2022-11-9 14:16:00\n * @Author: qixq\n * @FilePath: /src/pages/manager/order/ClockIn.tsx\n * \n*/\n\nconst ClockIn = ({\n  // open,\n  // openId,\n  // onClose,\n  // onOk,\n  // tag_type,\n}: clockInPropsType) => {\n\n  // custom state hooks 状态管理\n  // 行程日历下发的数据\n  const [scheduleCalendarData, setScheduleCalendarData] = useState<calendarDataType | null>(null)\n\n\n  // lifecycle\n  // componentDidMount 组件挂载\n  useEffect(() => { initConfig() }, [])\n\n  // componentWillUnmount 组件卸载\n  useEffect(() => { return () => {} }, [])\n\n\n  const initConfig = async () => {\n    // await fetch\n    // await initState\n  } \n\n  // api fetch data init data 请求数据 初始化数据\n  const fetchScheduleList = async (start_at: string, end_at: string) => {\n    // const params = {\n    //   app_id: '这里需要加id',\n    // }\n    // const response = await scheduleApi.fetchScheduleCalendarApi(params);\n    // if (response.status === EApiStatus.success) {\n    //   const { data } = response\n    //   const scheduleList = await changeResposeData(data)\n    //   setScheduleCalendarData(scheduleList)\n    // }\n  }\n\n  // methods 自定义方法\n\n  // 使用 reducer 重构 将date 作为key 生成对象\n  const changeResposeData = async (scheduleList: Array<IScheduleListType>) => {\n\n    const scheduleData = scheduleList.reduce((acc: any, cur) => {\n      const { date } = cur\n      acc[date] = cur\n      return acc\n    }, {})\n\n    return scheduleData\n\n  }\n\n  // click methods 点击方法\n  const handleSwitchMonth = (optType: 'pre' | 'next') => {\n\n  }\n\n\n  // claculate methods 计算属性\n\n  // const calendarShowData = calendar.data.fiscal_month.filter(item => item.fiscal_month === calendar.currentMonth)\n\n\n  // deconstruct assignment 解构赋值\n  const classes = useStyles();\n\n\n\n\n\n  // render ui 渲染ui\n  return (\n    <div className=\"svt-schedule-root\" onClick={() => handleSwitchMonth('next')}>\n      content\n    </div>\n  )\n}\n\nexport default ClockIn;\n"
         }
       ],
       "id": "j0jPJEIA",
       "createdAt": 1667145718327,
-      "updatedAt": 1667145852638
+      "updatedAt": 1667974935023
     },
     {
       "isDeleted": false,
@@ -390,6 +390,53 @@
       "id": "jE22R84l",
       "createdAt": 1667445837252,
       "updatedAt": 1667445850236
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "rhlgrR2r",
+      "tagsIds": [],
+      "description": null,
+      "name": "鼠标移入闪光",
+      "content": [
+        {
+          "label": "css",
+          "language": "css",
+          "value": ".btn {\n  display: inline-block;\n  width: 140px;\n  height: 48px;\n  border: 1px solid #fff;\n  background: #000000;\n  color: #fff;\n  text-align: center;\n  cursor: pointer;\n  font-size: 15px;\n  box-sizing: border-box;\n  line-height: 46px;\n  transition: all .3s;\n  -webkit-transition: all .3s;\n  border-radius: 24px;\n  margin-top: 25px\n}\n.btn {\n  position: relative;\n  overflow: hidden\n}\n \n.btn:after {\n  content: \"\";\n  position: absolute;\n  left: -120%;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background-image: -webkit-linear-gradient(0deg, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0));\n  transform: skewx(-25deg);\n  -webkit-transform: skewx(-25deg)\n}\n \n.btn:hover:after {\n  transition: all .5s ease;\n  left: 100%\n}"
+        },
+        {
+          "label": "html",
+          "language": "html",
+          "value": "<header style=\"text-align: center;\">\n    <h1 class=\"btn\">标题</h1>\n</header>"
+        }
+      ],
+      "id": "pil4bq3x",
+      "createdAt": 1667875151772,
+      "updatedAt": 1667875206227
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "rhlgrR2r",
+      "tagsIds": [
+        "tjDTTcDi",
+        "09BBhp9B",
+        "DzBzSlLF",
+        "1pjPMhWF",
+        "183VV8DP"
+      ],
+      "description": null,
+      "name": "输入框焦点下拉收起 搜索",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "html",
+          "value": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Document</title>\n\n  <style>\n    .wrap {\n      width: 150px;\n    }\n\n    .res {\n      width: 150px;\n      background-color: pink;\n      overflow: hidden;\n      max-height: 0px;\n      transition: max-height .3s ease-in-out;\n    }\n\n    .wrap:focus-within .res, .res:hover {\n      max-height: 40vh;\n    }\n  </style>\n</head>\n\n<body>\n  <div class=\"wrap\">\n    <input type=\"text\" class=\"input-el\">\n    <div class=\"res\">\n      <div class=\"\">1</div>\n      <div class=\"\">1</div>\n      <div class=\"\">1</div>\n      <div class=\"\">1</div>\n      <div class=\"\">1</div>\n      <div class=\"\">1</div>\n      <div class=\"\">1</div>\n      <div class=\"\">1</div>\n      <div class=\"\">1</div>\n      <div class=\"\">1</div>\n      <div class=\"\">1</div>\n    </div>\n  </div>\n</body>\n\n</html>"
+        }
+      ],
+      "id": "-98Npdla",
+      "createdAt": 1668333910087,
+      "updatedAt": 1668334594655
     }
   ],
   "tags": [
@@ -434,6 +481,42 @@
       "id": "MqQ2YrlM",
       "createdAt": 1667211416593,
       "updatedAt": 1667211416593
+    },
+    {
+      "name": "搜索框",
+      "id": "tjDTTcDi",
+      "createdAt": 1668333941195,
+      "updatedAt": 1668333941195
+    },
+    {
+      "name": "搜索",
+      "id": "09BBhp9B",
+      "createdAt": 1668333942793,
+      "updatedAt": 1668333942793
+    },
+    {
+      "name": "焦点",
+      "id": "DzBzSlLF",
+      "createdAt": 1668333944562,
+      "updatedAt": 1668333944562
+    },
+    {
+      "name": "下拉",
+      "id": "1pjPMhWF",
+      "createdAt": 1668333946296,
+      "updatedAt": 1668333946296
+    },
+    {
+      "name": "收起",
+      "id": "183VV8DP",
+      "createdAt": 1668333949031,
+      "updatedAt": 1668333949031
+    },
+    {
+      "name": "for f in \"$@\" do   open -a \"Visual Studio Code\" \"$f\" done",
+      "id": "rjbm4iXe",
+      "createdAt": 1668333968691,
+      "updatedAt": 1668333968691
     }
   ]
 }
