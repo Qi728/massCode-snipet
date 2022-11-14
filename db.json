@@ -153,12 +153,12 @@
         {
           "label": "子片段 1",
           "language": "plain_text",
-          "value": "#提测申请# #web前端提测# @Git 分支管理 @Git分支管理-Web前端 @朱晓娜(Hannah)\n\n-【web前端】-\n仓库：jwprotal\n集成分支：release/wy/ff23cfd5/release_sbux_20221009\n测试分支：release/wy/f28b7185/ent_sbux_20221009\n\n仓库：joywok-public-dist\n集成分支：release/wy/0ef33329/release_sbux_20221009\n测试分支：release/wy/965f63cd/ent_sbux_20221009\n\n\n-【测试内容】-\n周计划需求调整\n1. 右上角打印预览图标改为文字\n\n2. 打印\n2.1 页面由横向改为纵向\n2.2 打印预览弹框 客户可自由调整缩放倍数以适配A4纸张\n\n3. 新建事件\n3.1 无事件时点击空白新建\n3.2 有事件时移入展示加号点击加号新建 点击卡片为详情\n3.3 新建事件 - 时间取消限制 可以跨周\n3.4 点击新建按钮 - 时间组件默认为左上角日历当前选中周的第一天\n\n4. 新增全天开关\n4.1 本周关注 - 事件 新建事件组件新增全天开关控制是否展示时间部分\n4.2 打开开关 按天选取 不展示时间\n4.3 关闭开关 可以选择具体到时刻\n4.4 开关状态有后台记录\n4.5 新建时默认打开 编辑时读取后台记录的上一次开关状态\n\n5. 日历组件\n5.1 日历组件中的p 改为财月\n\n-【自测结果】-\n1. 右上角打印预览图标改为文字✅\n\n2. 打印\n2.1 页面由横向改为纵向✅\n2.2 打印预览弹框 客户可自由调整缩放倍数以适配A4纸张✅\n\n3. 新建事件\n3.1 无事件时点击空白新建✅\n3.2 有事件时移入展示加号点击加号新建 点击卡片为详情✅\n3.3 新建事件 - 时间取消限制 可以跨周✅\n3.4 点击新建按钮 - 时间组件默认为左上角日历当前选中周的第一天✅\n\n4. 新增全天开关\n4.1 本周关注 - 事件 新建事件组件新增全天开关控制是否展示时间部分✅\n4.2 打开开关 按天选取 不展示时间✅\n4.3 关闭开关 可以选择具体到时刻✅\n4.4 开关状态有后台记录✅\n4.5 新建时默认打开 编辑时读取后台记录的上一次开关状态✅\n\n5. 日历组件\n5.1 日历组件中的p 改为财月✅\n\n5. 日历组件\n5.1 日历组件中的p 改为财月\n\n\n-【影响点】-\n周计划\n\n\n-【测试环境】-\nhttps://dogesoft.joywok.com/url/PSaP4KX\n\n\n-【涉及核心文件】-\nsrc/scripts/pages/weekplan/index.js\nsrc/scripts/pages/weekplan/preview.js\n\n\ncc @王琰 、 @孟影(Luna) 、 @QA  @产品 @后台 @其他人  "
+          "value": "#提测申请# #web前端提测# @Git_分支管理    @Git分支管理-Web前端    @朱晓娜(Hannah) \n\n-【仓库&分支】-\n仓库：jowok-web\n分支：feature/qxq/bc14ee6fcb/file-assitant\n仓库：joywok-public-dist\n分支：feature/master/b6a620ed/liwh-file-trans-assistant-20221112\n仓库：joywok\n分支：feature/master/b6a620ed/liwh-file-trans-assistant-20221112\n\n产品Kickoff信息流：https://dogesoft.joywok.com/as/info?id=UjGd5uIKDsjzoB08#/\n\n项目出处：Sbux\n\n测试内容：\n系统管理 - 应用管理 - 系统自带应用 - 悦信 - 高级设置\n\n1、文件传输助手打开展示 名称 logo 上传区域\n2、名称为必填项 - 名称为空时禁止保存\n3、log 上传限制为 100*100px \n\n自测结果如下：\n\n1、文件传输助手打开展示 名称 logo 上传区域 ✅\n2、名称为必填项 - 名称为空时禁止保存 ✅\n3、log 上传限制为 100*100px  ✅\n\n\n影响点：\n无\n\n测试环境：\n1.51\n\n\n\n-【涉及核心文件】-\nsrc/scripts/components/Console/application/EditNativeApp/index.js\nsrc/scripts/components/Console/application/EditNativeApp/SuperSet.js\n\n\n\ncc @王琰  、@Web前端项目负责人、 @孟影(Luna) 、 @后台对接、@PO、 @其他相关人  @产品"
         }
       ],
       "id": "c-5QzuN7",
       "createdAt": 1667211034503,
-      "updatedAt": 1667211407956
+      "updatedAt": 1668413872234
     },
     {
       "isDeleted": false,
@@ -437,6 +437,49 @@
       "id": "-98Npdla",
       "createdAt": 1668333910087,
       "updatedAt": 1668334594655
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "PbPs_ezN",
+      "tagsIds": [
+        "6MuYskHS",
+        "pak2f4Jo",
+        "Rg2tVbeU"
+      ],
+      "description": null,
+      "name": "点击锁自定义hooks click",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "jsx",
+          "value": "/**\n * 忽略多次点击触发 Func Hooks\n * func: 事件异步处理函数\n */\nimport * as React from 'react';\n\nexport default function useIgnoreMultiClick() {\n  const [lock, setLock] = React.useState<boolean>(false);\n\n  const ignoreMultiClick = (func: any) => {\n    return async (...args: any[]) => {\n      if (lock) return;\n      setLock(true);\n      await func(...args);\n      setLock(false);\n    }\n  }\n\n  return {\n    lock,\n    setLock,\n    ignoreMultiClick,\n  }\n}"
+        }
+      ],
+      "id": "kVIyyNGD",
+      "createdAt": 1668351874375,
+      "updatedAt": 1668351990661
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "rhlgrR2r",
+      "tagsIds": [
+        "sVchkdtk",
+        "zio8deFc"
+      ],
+      "description": null,
+      "name": "卡片渐变移入动画",
+      "content": [
+        {
+          "label": "子片段 1",
+          "language": "html",
+          "value": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Document</title>\n  <style>\n    @keyframes fadeInLeft {\n      from {\n        opacity: 0;\n        transform: translateX(-10px);\n      }\n\n      to {\n        opacity: 1;\n        transform: translateX(0);\n      }\n    }\n\n    .out {\n      width: 100px;\n      height: 50px;\n      border: 1px solid greenyellow;\n\n    }\n\n    .out:hover .in {\n      animation: fadeInLeft .3s ease-in-out .5s;\n    }\n\n    .in {\n      width: 100px;\n      height: 50px;\n      background-color: pink;\n      opacity: 0;\n    }\n  </style>\n</head>\n\n<body>\n  <div class=\"out\">\n    <div class=\"in\"></div>\n  </div>\n</body>\n\n</html>"
+        }
+      ],
+      "id": "wcJHpO_9",
+      "createdAt": 1668414656834,
+      "updatedAt": 1668415025495
     }
   ],
   "tags": [
@@ -517,6 +560,36 @@
       "id": "rjbm4iXe",
       "createdAt": 1668333968691,
       "updatedAt": 1668333968691
+    },
+    {
+      "name": "click",
+      "id": "6MuYskHS",
+      "createdAt": 1668351896928,
+      "updatedAt": 1668351896928
+    },
+    {
+      "name": "点击锁",
+      "id": "pak2f4Jo",
+      "createdAt": 1668351899826,
+      "updatedAt": 1668351899826
+    },
+    {
+      "name": "自定义hooks",
+      "id": "Rg2tVbeU",
+      "createdAt": 1668351904447,
+      "updatedAt": 1668351904447
+    },
+    {
+      "name": "渐变",
+      "id": "sVchkdtk",
+      "createdAt": 1668414674730,
+      "updatedAt": 1668414674730
+    },
+    {
+      "name": "移入",
+      "id": "zio8deFc",
+      "createdAt": 1668414677784,
+      "updatedAt": 1668414677784
     }
   ]
 }
